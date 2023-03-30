@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@100;200;300;400;500&display=swap" rel="stylesheet">
     <title>Galéria | Bart.sk</title>
+    <script type="module" src="/src/main.ts"></script>
   </head>
   <body>
     <header class="mt-20 container mx-auto px-4 mb-5">
@@ -18,6 +19,7 @@
       <div class="gallery-grid">
         <div class="grid-item">
           <div class="flex flex-col w-full h-48 bg-white custom-shadow hover:scale-105 transition-all duration-100 ease-linear cursor-pointer rounded-md overflow-hidden">
+            <div class="absolute top-4 left-4 bg-black bg-opacity-60 px-2 py-1 text-white rounded-full font-thin text-xs">10 fotiek</div>
             <img class="block w-full h-4/6 object-cover" src="/images/tmp/1.jpg"></img>
             <div class="h-2/6 flex items-center justify-center text-center text-base font-medium">
               Príroda
@@ -26,6 +28,7 @@
         </div>
         <div class="grid-item">
           <div class="flex flex-col w-full h-48 bg-white custom-shadow hover:scale-105 transition-all duration-100 ease-linear cursor-pointer rounded-md overflow-hidden">
+            <div class="absolute top-4 left-4 bg-black bg-opacity-60 px-2 py-1 text-white rounded-full font-thin text-xs">6 fotiek</div>
             <img class="block w-full h-4/6 object-cover" src="/images/tmp/2.jpg"></img>
             <div class="h-2/6 flex items-center justify-center text-center text-base font-medium">
               Architektúra
@@ -34,6 +37,7 @@
         </div>
         <div class="grid-item">
           <div class="flex flex-col w-full h-48 bg-white custom-shadow hover:scale-105 transition-all duration-100 ease-linear cursor-pointer rounded-md overflow-hidden">
+            <div class="absolute top-4 left-4 bg-black bg-opacity-60 px-2 py-1 text-white rounded-full font-thin text-xs">2 fotky</div>
             <img class="block w-full h-4/6 object-cover" src="/images/tmp/3.jpg"></img>
             <div class="h-2/6 flex items-center justify-center text-center text-base font-medium">
               Ľudia
@@ -42,6 +46,7 @@
         </div>
         <div class="grid-item">
           <div class="flex flex-col w-full h-48 bg-white custom-shadow hover:scale-105 transition-all duration-100 ease-linear cursor-pointer rounded-md overflow-hidden">
+            <div class="absolute top-4 left-4 bg-black bg-opacity-60 px-2 py-1 text-white rounded-full font-thin text-xs">10 fotiek</div>
             <img class="block w-full h-4/6 object-cover" src="/images/tmp/4.jpg"></img>
             <div class="h-2/6 flex items-center justify-center text-center text-base font-medium">
               Jedlo
@@ -50,6 +55,7 @@
         </div>
         <div class="grid-item">
           <div class="flex flex-col w-full h-48 bg-white custom-shadow hover:scale-105 transition-all duration-100 ease-linear cursor-pointer rounded-md overflow-hidden">
+            <div class="absolute top-4 left-4 bg-black bg-opacity-60 px-2 py-1 text-white rounded-full font-thin text-xs">10 fotiek</div>
             <img class="block w-full h-4/6 object-cover" src="/images/tmp/5.jpg"></img>
             <div class="h-2/6 flex items-center justify-center text-center text-base font-medium">
               Abstraktné
@@ -57,7 +63,7 @@
           </div>
         </div>
         <div class="grid-item">
-          <div class="flex items-center justify-center w-full h-48 bg-white custom-shadow hover:scale-105 transition-all duration-100 ease-linear cursor-pointer rounded-md overflow-hidden">
+          <div data-modal-id="addGalleryModal" data-action="open" class="modalTrigger flex items-center justify-center w-full h-48 bg-white custom-shadow hover:scale-105 transition-all duration-100 ease-linear cursor-pointer rounded-md overflow-hidden">
             <div class="flex flex-col h-full w-full items-center justify-center">
               <div class="h-8 w-8 mb-2 fill-[#adadad]">
                 <svg viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -77,12 +83,23 @@
         </div>
       </div>
     </main>
-    <div id="addGalleryModal" class="opacity-100 fixed top-0 left-0 w-[100vw] h-[100dvh]">
-      <div class="absolute left-0 top-0 w-full h-full bg-black opacity-50 z-10"></div>
+    <div id="addGalleryModal" class="opacity-0 fixed -z-10 top-0 left-0 w-[100vw] h-[100dvh] transition-all duration-300">
+      <div data-modal-id="addGalleryModal" data-action="close" class="modalTrigger absolute left-0 top-0 w-full h-full bg-black opacity-50 z-10"></div>
       <div class="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 z-20">
-        <div class="h-[30rem] w-[50rem] max-w-[90vw] bg-white rounded-3xl"></div>
+        <form class="h-fit w-[50rem] max-w-[90vw] md:max-w-[65vw] bg-white rounded-3xl p-12">
+          <div class="flex items-center justify-between mb-8">
+            <h1 class="block text-xl font-bold">Pridať kategóriu</h1>
+            <div data-modal-id="addGalleryModal" data-action="close" class="modalTrigger w-5 h-5 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </div>
+          </div>
+          <div class="relative mb-4">
+            <label for="inputField" class="absolute -translate-y-1/2 top-0 left-2 px-2 bg-white font-medium text-xs">Názov kategórie *</label>
+            <input type="text" required id="inputField" class="border border-gray-400 rounded-md outline-none focus:border-black px-4 py-3 w-full transition-all duration-100">
+          </div>
+          <button type="submit" class="w-full bg-black outline-none text-white px-4 rounded-md py-5">Pridať</button>
+        </form>
       </div>
     </div>
-    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
