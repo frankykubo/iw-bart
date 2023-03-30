@@ -47,4 +47,4 @@ const bindModalOpeners = () => {
 window.addEventListener('DOMContentLoaded', () => {
     console.log('here')
     bindModalOpeners();
-})
+});

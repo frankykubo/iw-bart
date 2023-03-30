@@ -1,6 +1,11 @@
 :root {
     font-family: 'Barlow', sans-serif;
     background: #F9F9F9 0% 0% no-repeat padding-box;
+    min-width: 320px;
+}
+
+html, body {
+    min-width: 320px;
 }
 
 .gallery-grid {
