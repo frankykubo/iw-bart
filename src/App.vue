@@ -1,85 +1,61 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
+  <header class="mt-20 container mx-auto px-4 mb-5">
+    <h1 class="text-3xl font-medium container">Fotogaléria</h1>
   </header>
 
-  <RouterView />
+  <RouterView v-slot="{ Component }">
+    <template v-if="Component">
+      <Transition mode="out-in">
+        <KeepAlive>
+          <Suspense>
+            <component :is="Component"></component>
+            <template #fallback>
+              <main class="container mx-auto px-4 mb-20">
+                <div class="gallery-grid">
+                  <div v-for="(num, idx) in [1, 2, 3, 4, 5]" :key="idx" class="w-full h-48 loader" />
+                </div>
+              </main>
+            </template>
+          </Suspense>
+        </KeepAlive>
+      </Transition>
+    </template>
+  </RouterView>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.loader {
+  background:
+    linear-gradient(0.25turn, transparent, #FFF, transparent),
+    linear-gradient(#DDD, #DDD),
+    linear-gradient(#DDD, #DDD);
+
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-size: 315px 200px, 315px 130px, 240px 100px, 225px 30px;
+  background-position: -315px 0, 0 0, 0px 140px, 65px 145px;
+  animation: loading 1.5s infinite;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+@keyframes loading {
+  to {
+    background-position: 315px 0, 0 0, 0 140px, 65px 145px;
   }
+}
+</style>
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+<style>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
