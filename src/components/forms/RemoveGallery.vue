@@ -1,12 +1,21 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { reactive, type PropType } from 'vue';
 import axios, { AxiosError } from 'axios';
 import type { SubmitError } from '@/types/api';
 import AbsoluteLoader from '../AbsoluteLoader.vue';
 
+const props = defineProps({
+    galleryDetail: {
+        type: Object as PropType<{
+            name: String,
+            path: String,
+        }>,
+        required: true,
+    }
+});
+
 const emit = defineEmits(['closeModal']);
 
-const categoryName = ref('');
 const formState = reactive({
     submiting: false,
     hasError: false,
@@ -23,19 +32,8 @@ const onSubmit = async () => {
     formState.submiting = true;
     // Just to add some loading time
     await new Promise(resolve => setTimeout(() => resolve('timeout succeed'), 500));
-    if (!categoryName.value) {
-        formState.errorDetail = {
-            code: undefined,
-            description: 'Názov musí mať dĺžku aspoň 1 znak.',
-        };
-        formState.hasError = true;
-        formState.submiting = false;
-        return;
-    }
     try {
-        await axios.post(`${import.meta.env.VITE_APP_API_URL}/gallery`, {
-            name: categoryName.value,
-        });
+        await axios.delete(`${import.meta.env.VITE_APP_API_URL}/gallery/${props.galleryDetail.path}`);
         formState.success = true;
         formState.submiting = false;
     } catch (e: any) {
@@ -53,14 +51,9 @@ const onSubmit = async () => {
 
 <template>
     <div>
-        <form class="w-[50rem] max-w-[90vw] md:max-w-[65vw] px-12 pb-12 pt-1" @submit.prevent="onSubmit">
+        <div class="w-[50rem] max-w-[90vw] md:max-w-[65vw] px-12 pb-12 pt-1">
             <div class="relative mb-4">
-                <label for="inputField"
-                    class="absolute -translate-y-1/2 top-0 left-2 px-2 bg-white font-medium text-xs">Názov
-                    kategórie
-                    *</label>
-                <input type="text" required id="inputField" v-model="categoryName"
-                    class="border border-gray-400 rounded-md outline-none focus:border-black px-4 py-3 w-full transition-all duration-100">
+                Naozaj chcete vymazať galériu <span class="font-bold">{{ galleryDetail.name }}</span>?
             </div>
             <div v-if="formState.hasError" class="text-left mb-4">
                 <div class="text-sm text-red-500">Chyba pri odoslaní formulára ({{ formState.errorDetail.code ? `kód
@@ -68,9 +61,14 @@ const onSubmit = async () => {
                     : `Nedefinovanýkód chyby` }})!</div>
                 <div>{{ formState.errorDetail.description }}</div>
             </div>
-            <button type="submit"
-                class="w-full bg-black outline-none text-white px-4 rounded-md py-5 hover:bg-opacity-80">Pridať</button>
-        </form>
+            <div class="flex items-center">
+                <button @click="onSubmit"
+                    class="w-full bg-red-600 outline-none text-white px-4 rounded-md py-5 hover:bg-opacity-80 mr-4">Vymazať</button>
+                <button
+                    class="w-full bg-black bg-opacity-20 outline-none text-white px-4 rounded-md py-5 hover:bg-opacity-30"
+                    @click="emit('closeModal')">Zrušiť</button>
+            </div>
+        </div>
         <Transition>
             <AbsoluteLoader v-if="formState.submiting" />
         </Transition>
@@ -86,7 +84,7 @@ const onSubmit = async () => {
                         </svg>
                     </div>
                     <div class="text-lg font-bold mb-3 text-green-500">
-                        Kategória bola úspešne vytvorená!
+                        Kategória bola zmazaná!
                     </div>
                     <button class="block bg-black outline-none text-white px-6 rounded-md py-2 hover:bg-opacity-80"
                         @click="emit('closeModal')">

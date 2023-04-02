@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
+import { isElementInView } from '@/util/viewport';
 
 const modalContainer = ref<HTMLElement>();
 
@@ -9,8 +10,25 @@ defineProps({
         required: false,
         default: null,
     }
-})
+});
 const emit = defineEmits(['closeModal']);
+
+const handleEscKey = (event: KeyboardEvent) => {
+    if (event.key !== 'Escape' || !modalContainer.value) {
+        return;
+    }
+    if (isElementInView(modalContainer.value)) {
+        emit('closeModal');
+    }
+}
+
+onMounted(() => {
+    document.addEventListener('keydown', handleEscKey);
+});
+
+onUnmounted(() => {
+    document.removeEventListener('keydown', handleEscKey);
+});
 </script>
 
 <template>
