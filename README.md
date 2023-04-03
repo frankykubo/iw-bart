@@ -1,46 +1,49 @@
-# bart-frankovic-2
+# Bart.sk - Interview Jakub Frankovic | Task 2 & 3
 
-This template should help get you started developing with Vue 3 in Vite.
+Táto vetva obsahuje vypracované zadanie 2 a 3, ktoré boli diskutované na pracovnom pohovore. Rozhodol som sa tieto 2 úlohy spojiť, keďže implementovať projekt vo Vue bez pripojenia na API a neskôr s pripojením na reálne dáta by bola sizyfovská práca s minimálnymi rozdielmi. Verím, že je to pochopiteľné.
 
-## Recommended IDE Setup
+V rámci mojej implementácie môžete nájsť všetkú funkcionalitu, ktorú webová appka Fotogaléria potrebuje. Na dizajn bola použitá externá knižnica <b>tailwindcss</b>, ktorú som spomínal už na technickom screeningu. Ako package manager npm knižníc som využil <b>pnpm</b>, ktoré využívam už zo zvyklosti, keďže si dokáže libky nacache-ovať a tým pádom opakovaná inštalácia netrvá tak dlho. Keďže sa objavili problémy pri použití elementu _<router-view \/>_ pod \*<Suspense \/> (kvôli asynchrónnym komponentom), musel som využiť libku na pracovanie so stavmi - <b>Pinia</b>, kde mám príznak, ktorý hovorí o tom, či sa aktuálne načítava stránka.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Ako už bolo spomenuté, ako framework som použil Vue 3 spolu s TypeScriptom. Využité boli SFC komponenty (najmodernejšia syntax). Okrem spomínaných knižníc bolo všetko implementované takpovediac od piky - modaly, inputy, animácie, responzivita.
 
-## Type Support for `.vue` Imports in TS
+Responzivita Webu bola testovaná na intervale šírky obrazovky od 320px do 2500px.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+<br>
+Zadanie obsahuje nasledovnú funkcionalitu:
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+- Zobrazenie galérií (kategórií)
+- Vytvorenie galérie (kategórie)
+- Zmazanie galérie (kategórie)
+- Asynchrónne komponenty (na základe čoho využitý skeleton)
+- Zobrazenie galérie a jednotlivých obrázkov
+- Vymazanie jednotlivých obrázkov
+- Upload pomocou natívneho uploadera alebo pomocou drag & drop
+- Ukazovatele stavov (napr. progress bar pri uploade)
+- Pri niektorých akciách boli naschvál pridané nejake delaye, aby bolo vidieť postup (napr upload obrázkov)
+- routing
+- 404 stránku
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+## IDE Setup
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+Na vývoj som použil, ako aj samotný tým Vue odporúča, [VSCode](https://code.visualstudio.com/) + extension [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
 ## Project Setup
 
 ```sh
-npm install
+npm i -g pnpm
+pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+### Spustenie dev servera
 
 ```sh
-npm run dev
+pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Kontrola typov, kompilácia a minifikácia pre production build
 
 ```sh
 npm run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+Následne nahrať zložku dist na nejaký host server apache alebo nginx, nastaviť aby fungovalo vue-router History mode a aplikácia by mala frčať.
