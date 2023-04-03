@@ -34,6 +34,10 @@ npm i -g pnpm
 pnpm install
 ```
 
+### Setup enviromnent variables
+
+Vytvorte súbor s premennými prostredia. V tomto prípade stačí skopírovať `.env.example` a uložiť ako `.env`.
+
 ### Spustenie dev servera
 
 ```sh
