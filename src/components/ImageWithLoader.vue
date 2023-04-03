@@ -50,8 +50,8 @@ watch(() => props.imgUrl, () => {
             </Transition>
             <Transition>
                 <div v-if="hasError" class="w-full h-full flex justify-center items-center">
-                    <div>
-                        Obrazok sa nepodarilo nacitat
+                    <div class="font-bold text-lg text-red-500">
+                        Obrázok sa nepodarilo načítať
                     </div>
                 </div>
             </Transition>

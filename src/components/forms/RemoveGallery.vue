@@ -2,8 +2,9 @@
 import { reactive, type PropType } from 'vue';
 import axios, { AxiosError } from 'axios';
 import type { SubmitError } from '@/types/api';
-import AbsoluteLoader from '../AbsoluteLoader.vue';
+import AbsoluteLoader from '@/components/AbsoluteLoader.vue';
 import ErrorViewer from './ErrorViewer.vue';
+import IconCheckmark from '@/components/icons/IconCheckmark.vue';
 
 const props = defineProps({
     galleryDetail: {
@@ -82,11 +83,7 @@ const onSubmit = async () => {
                 class="absolute left-0 top-0 w-full h-full bg-white bg-opacity-80 flex items-center justify-center p-2">
                 <div class="flex flex-col justify-center items-center">
                     <div class="w-20 mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" enable-background="new 0 0 64 64">
-                            <path
-                                d="M32,2C15.431,2,2,15.432,2,32c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30C62,15.432,48.568,2,32,2z M25.025,50  l-0.02-0.02L24.988,50L11,35.6l7.029-7.164l6.977,7.184l21-21.619L53,21.199L25.025,50z"
-                                fill="#43a047" />
-                        </svg>
+                        <IconCheckmark />
                     </div>
                     <div class="text-lg font-bold mb-3 text-green-500">
                         {{ successText }}

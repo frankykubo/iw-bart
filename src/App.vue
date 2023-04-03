@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import { usePageLoadingStore } from '@/stores/pageLoading';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
+const route = useRoute();
 const router = useRouter();
 const store = usePageLoadingStore();
 
@@ -12,7 +13,7 @@ router.afterEach(() => {
 </script>
 
 <template>
-  <header class="mt-20 container mx-auto px-4 mb-5">
+  <header v-if="route.name !== 'NotFound'" class="mt-20 container mx-auto px-4 mb-5">
     <h1 class="text-3xl font-medium container">Fotogaléria</h1>
   </header>
 

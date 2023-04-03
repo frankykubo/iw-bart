@@ -4,12 +4,12 @@ import axios, { AxiosError } from 'axios';
 import type { SubmitError } from '@/types/api';
 import { useRoute } from 'vue-router';
 import ErrorViewer from './ErrorViewer.vue';
-import FileSubmitLoader from '../FileSubmitLoader.vue';
+import FileSubmitLoader from '@/components/FileSubmitLoader.vue';
+import IconCheckmark from '@/components/icons/IconCheckmark.vue';
 
 enum DragDropState {
     IDLE,
     OVER,
-    DROPPED,
 }
 
 const emit = defineEmits(['closeModal', 'submitSuccess']);
@@ -33,6 +33,7 @@ const formState = reactive({
         error: 0,
     }
 });
+
 const onSubmit = async () => {
     if (formState.hasError) {
         formState.hasError = false;
@@ -68,9 +69,12 @@ const onSubmit = async () => {
     if (formState.done.success > 0) {
         emit('submitSuccess');
     }
-    formState.success = true;
-    formState.submiting = false;
 
+    // setTimeout to be able to see 100% loader
+    setTimeout(() => {
+        formState.success = true;
+        formState.submiting = false;
+    }, 400);
 }
 
 const processImages = (files: FileList) => {
@@ -138,7 +142,16 @@ const onFileChange = () => {
                 <div v-if="localImages.length > 0">
                     <h2 class="block text-xl font-bold mb-2">Nahraté fotografie (náhľad)</h2>
                     <div class="flex items-center flex-wrap mb-4">
-                        <div class="mr-2" v-for="img in localImages" :key="img.url">
+                        <div class="mr-4 relative" v-for="(img, idx) in localImages" :key="idx">
+                            <div class="absolute translate-x-1/2 -translate-y-1/2 bg-red-500 cursor-pointer hover:bg-red-400 p-1 w-6 h-6 rounded-full top-0 right-0 z-10"
+                                @click="localImages.splice(idx, 1)">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#ffffff"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-x">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </div>
                             <img class="block w-20 h-20 object-cover" :src="img.url" alt="Uploaded image" />
                         </div>
                     </div>
@@ -156,14 +169,10 @@ const onFileChange = () => {
         </Transition>
         <Transition>
             <div v-if="formState.success"
-                class="absolute left-0 top-0 w-full h-full bg-white bg-opacity-80 flex items-center justify-center p-2">
+                class="absolute left-0 top-0 w-full h-full bg-white bg-opacity-80 flex items-center justify-center p-2 z-20">
                 <div class="flex flex-col justify-center items-center">
                     <div class="w-20 mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" enable-background="new 0 0 64 64">
-                            <path
-                                d="M32,2C15.431,2,2,15.432,2,32c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30C62,15.432,48.568,2,32,2z M25.025,50  l-0.02-0.02L24.988,50L11,35.6l7.029-7.164l6.977,7.184l21-21.619L53,21.199L25.025,50z"
-                                fill="#43a047" />
-                        </svg>
+                        <IconCheckmark />
                     </div>
                     <div class="text-lg font-bold mb-3 text-green-500">
                         <div>Úspešne nahratých fotografií: {{ formState.done.success }}</div>
@@ -220,7 +229,7 @@ const onFileChange = () => {
 }
 
 .animatedBorder {
-    background-color: #9fff9d;
+    background-color: #a4c6ff;
     border: 0.35rem solid;
     border-image: conic-gradient(from var(--angle), var(--c2), var(--c1) 0.1turn, var(--c1) 0.15turn, var(--c2) 0.25turn) 30;
     animation: borderRotate var(--d) linear infinite forwards;

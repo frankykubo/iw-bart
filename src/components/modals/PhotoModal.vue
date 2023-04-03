@@ -18,12 +18,17 @@ const apiUrl = import.meta.env.VITE_APP_API_URL;
 const route = useRoute();
 let imagePath = route.params.imagePath as string;
 imagePath = imagePath.replace('_ext_', '.');
+const imageExists = ref(true);
 
 const imageGalleryIdx = computed(() => {
     return props.galleryData.images!.findIndex((elm) => {
         return elm.path === imagePath
     }) as number;
 })
+
+if (imageGalleryIdx.value === -1) {
+    imageExists.value = false;
+}
 
 const prevIndex = computed(() => {
     if (imageGalleryIdx.value === 0) {
@@ -72,7 +77,7 @@ onUnmounted(() => {
                     <ImageWithLoader class="block w-full h-full" :img-url="imageUrl"
                         img-classes="block w-full h-full object-contain" />
                 </div>
-                <div class="arrows">
+                <div v-if="galleryData.images!.length > 0 && imageExists" class="arrows">
                     <RouterLink
                         :to="{ name: 'gallery', params: { path: route.params.path, imagePath: galleryData.images![prevIndex].path.replace('.', '_ext_') } }"
                         class="flex items-center justify-center p-4 hover:scale-110 cursor-pointer transition-transform duration-100 -translate-y-1/2 -translate-x-1/2 top-1/2 h-12 w-12 rounded-full bg-white absolute left-0">

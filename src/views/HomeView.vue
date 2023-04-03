@@ -11,6 +11,7 @@ import RemoveGallery from '@/components/forms/RemoveGallery.vue';
 
 const apiUrl = import.meta.env.VITE_APP_API_URL;
 const formModalOpened = ref(false);
+const noDataAvailable = ref(false);
 const removeGalleryModal = reactive({
   opened: false,
   galleryDetail: {
@@ -42,7 +43,11 @@ const fetchData = async () => {
   }));
 }
 
-await fetchData();
+try {
+  await fetchData();
+} catch {
+  noDataAvailable.value = true;
+}
 
 const promptGalleryModal = (name: string, path: string) => {
   removeGalleryModal.galleryDetail = {
@@ -56,58 +61,64 @@ const promptGalleryModal = (name: string, path: string) => {
 
 <template>
   <div>
-    <main class="container mx-auto px-4 mb-20">
-      <div class="gallery-grid">
-        <div v-for="(gallery, idx) in processedGallery" :key="idx"
-          class="relative bg-white custom-shadow hover:scale-105 transition-all duration-100 ease-linear cursor-pointer rounded-md overflow-hidden">
-          <div class="absolute top-3 left-3 z-20 flex items-center">
-            <router-link :to="{ name: 'gallery', params: { path: gallery.path } }"
-              class="bg-black bg-opacity-60 px-2 py-1 text-white rounded-full font-thin text-xs h-6 flex items-center justify-center mr-1">
-              {{ gallery.length }}
-              <!-- I could use for ex. i18n lib but since this is the only case, I am choosing this approach -->
-              {{ gallery.length === 1 ? 'fotka' : gallery.length > 1 && gallery.length < 5 ? 'fotky' : 'fotiek' }}
-                </router-link>
-                <DeleteIcon class="relative z-20 h-6 w-6 p-1.5" title="Vymazať galériu"
-                  @icon-clicked="promptGalleryModal(gallery.name, gallery.path)" />
-          </div>
-          <router-link :to="{ name: 'gallery', params: { path: gallery.path } }" class="grid-item">
-            <div class="flex flex-col w-full h-48">
-              <ImageWithLoader v-if="gallery.image" class="block w-full h-4/6" :img-url="gallery.image.url"
-                img-classes="object-cover w-full h-full" />
-              <div class="block w-full h-4/6 relative p-2" v-else>
-                <ImageWithLoader img-url="/images/empty-frame.png" class="block h-full w-full"
-                  img-classes="h-full w-full rounded-sm" />
-                <div class="text-sm text-black absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-center">
-                  Galéria neobsahuje žiadne fotografie!
+    <div v-if="!noDataAvailable">
+      <main class="container mx-auto px-4 mb-20">
+        <div class="gallery-grid">
+          <div v-for="(gallery, idx) in processedGallery" :key="idx"
+            class="relative bg-white custom-shadow hover:scale-105 transition-all duration-100 ease-linear cursor-pointer rounded-md overflow-hidden">
+            <div class="absolute top-3 left-3 z-20 flex items-center">
+              <router-link :to="{ name: 'gallery', params: { path: gallery.path } }"
+                class="bg-black bg-opacity-60 px-2 py-1 text-white rounded-full font-thin text-xs h-6 flex items-center justify-center mr-1">
+                {{ gallery.length }}
+                <!-- I could use for ex. i18n lib but since this is the only case, I am choosing this approach -->
+                {{ gallery.length === 1 ? 'fotka' : gallery.length > 1 && gallery.length < 5 ? 'fotky' : 'fotiek' }}
+                  </router-link>
+                  <DeleteIcon class="relative z-20 h-6 w-6 p-1.5" title="Vymazať galériu"
+                    @icon-clicked="promptGalleryModal(gallery.name, gallery.path)" />
+            </div>
+            <router-link :to="{ name: 'gallery', params: { path: gallery.path } }" class="grid-item">
+              <div class="flex flex-col w-full h-48">
+                <ImageWithLoader v-if="gallery.image" class="block w-full h-4/6" :img-url="gallery.image.url"
+                  img-classes="object-cover w-full h-full" />
+                <div class="block w-full h-4/6 relative p-2" v-else>
+                  <ImageWithLoader img-url="/images/empty-frame.png" class="block h-full w-full"
+                    img-classes="h-full w-full rounded-sm" />
+                  <div class="text-sm text-black absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-center">
+                    Galéria neobsahuje žiadne fotografie!
+                  </div>
+                </div>
+                <div class="h-2/6 flex items-center justify-center text-center text-base font-medium">
+                  {{ gallery.name }}
                 </div>
               </div>
-              <div class="h-2/6 flex items-center justify-center text-center text-base font-medium">
-                {{ gallery.name }}
-              </div>
-            </div>
-          </router-link>
+            </router-link>
+          </div>
+          <div class="grid-item">
+            <AddActionCard @click="formModalOpened = true;" card-text="Pridať kategóriu" />
+          </div>
         </div>
-        <div class="grid-item">
-          <AddActionCard @click="formModalOpened = true;" card-text="Pridať kategóriu" />
-        </div>
-      </div>
-    </main>
-    <Transition>
-      <FormModal v-if="formModalOpened" @close-modal="formModalOpened = false;" title="Pridať kategóriu">
-        <template #modal-content>
-          <AddCategory @close-modal="formModalOpened = false;" @successful-submit="fetchData" />
-        </template>
-      </FormModal>
-    </Transition>
-    <Transition>
-      <FormModal v-if="removeGalleryModal.opened" @close-modal="removeGalleryModal.opened = false;"
-        title="Vymazať galériu">
-        <template #modal-content>
-          <RemoveGallery :gallery-detail="removeGalleryModal.galleryDetail"
-            @close-modal="removeGalleryModal.opened = false;" item-question="Naozaj chcete vymazať galériu"
-            success-text="Kategória bola zmazaná!" @successful-submit="fetchData" />
-        </template>
-      </FormModal>
-    </Transition>
+      </main>
+      <Transition>
+        <FormModal v-if="formModalOpened" @close-modal="formModalOpened = false;" title="Pridať kategóriu">
+          <template #modal-content>
+            <AddCategory @close-modal="formModalOpened = false;" @successful-submit="fetchData" />
+          </template>
+        </FormModal>
+      </Transition>
+      <Transition>
+        <FormModal v-if="removeGalleryModal.opened" @close-modal="removeGalleryModal.opened = false;"
+          title="Vymazať galériu">
+          <template #modal-content>
+            <RemoveGallery :gallery-detail="removeGalleryModal.galleryDetail"
+              @close-modal="removeGalleryModal.opened = false;" item-question="Naozaj chcete vymazať galériu"
+              success-text="Kategória bola zmazaná!" @successful-submit="fetchData" />
+          </template>
+        </FormModal>
+      </Transition>
+    </div>
+    <div v-else
+      class="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 w-screen h-[100dvh] flex items-center justify-center">
+      <div class="text-red-500 font-bold text-lg">Nepodarilo sa načítať dáta</div>
+    </div>
   </div>
 </template>
