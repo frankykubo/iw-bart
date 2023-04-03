@@ -1,12 +1,12 @@
 # Bart.sk - Interview Jakub Frankovic | Task 2 & 3
 
-Táto vetva obsahuje vypracované zadanie 2 a 3, ktoré boli diskutované na pracovnom pohovore. Rozhodol som sa tieto 2 úlohy spojiť, keďže implementovať projekt vo Vue bez pripojenia na API a neskôr s pripojením na reálne dáta by bola sizyfovská práca s minimálnymi rozdielmi. Verím, že je to pochopiteľné.
+Táto vetva obsahuje vypracované zadanie 2 a 3, ktoré mi boli doručené po pracovnom pohovore. Rozhodol som sa tieto 2 úlohy spojiť, keďže implementovať projekt vo Vue bez pripojenia na API a neskôr s pripojením na reálne dáta by bola sizyfovská práca s minimálnymi rozdielmi. Verím, že je to pochopiteľné aj vzhľadom na môj aktuálny voľný čas.
 
-V rámci mojej implementácie môžete nájsť všetkú funkcionalitu, ktorú webová appka Fotogaléria potrebuje. Na dizajn bola použitá externá knižnica <b>tailwindcss</b>, ktorú som spomínal už na technickom screeningu. Ako package manager npm knižníc som využil <b>pnpm</b>, ktoré využívam už zo zvyklosti, keďže si dokáže libky nacache-ovať a tým pádom opakovaná inštalácia netrvá tak dlho. Keďže sa objavili problémy pri použití elementu _<router-view \/>_ pod \*<Suspense \/> (kvôli asynchrónnym komponentom), musel som využiť libku na pracovanie so stavmi - <b>Pinia</b>, kde mám príznak, ktorý hovorí o tom, či sa aktuálne načítava stránka.
+V rámci mojej implementácie môžete nájsť všetkú funkcionalitu, ktorú webová appka Fotogaléria potrebuje. Na dizajn bola použitá externá knižnica <b>tailwindcss</b>, ktorú som spomínal už na technickom screeningu. Ako package manager npm knižníc som využil <b>pnpm</b>, ktoré využívam už zo zvyklosti, keďže si dokáže libky nacache-ovať a tým pádom opakovaná inštalácia netrvá tak dlho. Keďže sa objavili problémy pri použití elementu _<router-view \/>_ pod _\<Suspense \/>_ (kvôli asynchrónnym komponentom), musel som využiť libku na pracovanie so stavmi - <b>Pinia</b>, kde mám príznak, ktorý hovorí o tom, či sa aktuálne načítava stránka.
 
 Ako už bolo spomenuté, ako framework som použil Vue 3 spolu s TypeScriptom. Využité boli SFC komponenty (najmodernejšia syntax). Okrem spomínaných knižníc bolo všetko implementované takpovediac od piky - modaly, inputy, animácie, responzivita.
 
-Responzivita Webu bola testovaná na intervale šírky obrazovky od 320px do 2500px.
+Responzivita webu bola testovaná na intervale šírky obrazovky od 320px do 2500px.
 
 <br>
 Zadanie obsahuje nasledovnú funkcionalitu:
