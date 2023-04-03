@@ -24,6 +24,7 @@ const noDataAvailable = reactive({
 const fetchData = async () => {
     const galleryDataResponse = await axios.get<Gallery>(`${apiUrl}/gallery/${route.params.path}`);
     galleryData.value = galleryDataResponse.data;
+    document.title = `${document.title} | ${galleryData.value.gallery!.name}`
 };
 
 try {

@@ -41,6 +41,7 @@ const fetchData = async () => {
       length: galleryData.data.images!.length,
     } as ProcessedGallery;
   }));
+  document.title = 'Fotogaléria'
 }
 
 try {
