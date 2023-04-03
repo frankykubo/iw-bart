@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { reactive, ref } from 'vue';
 import axios from 'axios';
 import type { Gallery, ProcessedGallery } from '@/types/gallery';
 import AddActionCard from '@/components/AddActionCard.vue';
@@ -7,7 +8,6 @@ import AddCategory from '@/components/forms/AddCategory.vue';
 import ImageWithLoader from '@/components/ImageWithLoader.vue';
 import DeleteIcon from '@/components/icons/DeleteIcon.vue';
 import RemoveGallery from '@/components/forms/RemoveGallery.vue';
-import { reactive, ref } from 'vue';
 
 const apiUrl = import.meta.env.VITE_APP_API_URL;
 const formModalOpened = ref(false);
@@ -62,13 +62,13 @@ const promptGalleryModal = (name: string, path: string) => {
           class="relative bg-white custom-shadow hover:scale-105 transition-all duration-100 ease-linear cursor-pointer rounded-md overflow-hidden">
           <div class="absolute top-3 left-3 z-20 flex items-center">
             <router-link :to="{ name: 'gallery', params: { path: gallery.path } }"
-              class="block bg-black bg-opacity-60 px-2 py-1 text-white rounded-full font-thin text-xs h-6 flex items-center justify-center mr-1">
-              {{
-                gallery.length }}
-              fotiek
-            </router-link>
-            <DeleteIcon class="relative z-20 h-6 w-6 p-1.5" title="Vymazať galériu"
-              @icon-clicked="promptGalleryModal(gallery.name, gallery.path)" />
+              class="bg-black bg-opacity-60 px-2 py-1 text-white rounded-full font-thin text-xs h-6 flex items-center justify-center mr-1">
+              {{ gallery.length }}
+              <!-- I could use for ex. i18n lib but since this is the only case, I am choosing this approach -->
+              {{ gallery.length === 1 ? 'fotka' : gallery.length > 1 && gallery.length < 5 ? 'fotky' : 'fotiek' }}
+                </router-link>
+                <DeleteIcon class="relative z-20 h-6 w-6 p-1.5" title="Vymazať galériu"
+                  @icon-clicked="promptGalleryModal(gallery.name, gallery.path)" />
           </div>
           <router-link :to="{ name: 'gallery', params: { path: gallery.path } }" class="grid-item">
             <div class="flex flex-col w-full h-48">
