@@ -9,7 +9,11 @@ export type Gallery = {
     path:  string;
     image?: Image;
     name:  string;
-    images?: Image[]
+    images?: Image[];
+    gallery?: {
+        name: string;
+        path: string;
+    }
 }
 
 export type Image = {

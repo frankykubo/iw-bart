@@ -1,10 +1,16 @@
 <script setup lang="ts">
-//
+defineProps({
+    cardText: {
+        type: String,
+        required: false,
+        default: undefined,
+    }
+})
 </script>
 
 <template>
     <div
-        class="modalTrigger flex items-center justify-center w-full h-48 bg-white custom-shadow hover:scale-105 transition-all duration-100 ease-linear cursor-pointer rounded-md overflow-hidden">
+        class="flex items-center justify-center w-full h-48 bg-white custom-shadow hover:scale-105 transition-all duration-100 ease-linear cursor-pointer rounded-md overflow-hidden">
         <div class="flex flex-col h-full w-full items-center justify-center">
             <div class="h-8 w-8 mb-2 fill-[#adadad]">
                 <svg viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -19,8 +25,8 @@
                     </g>
                 </svg>
             </div>
-            <div class="px-2 text-black">
-                Pridať kategóriu
+            <div v-if="cardText" class="px-2 text-black">
+                {{ cardText }}
             </div>
         </div>
     </div>

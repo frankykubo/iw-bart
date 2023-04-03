@@ -3,8 +3,9 @@ import { reactive, ref } from 'vue';
 import axios, { AxiosError } from 'axios';
 import type { SubmitError } from '@/types/api';
 import AbsoluteLoader from '../AbsoluteLoader.vue';
+import ErrorViewer from './ErrorViewer.vue';
 
-const emit = defineEmits(['closeModal']);
+const emit = defineEmits(['closeModal', 'successfulSubmit']);
 
 const categoryName = ref('');
 const formState = reactive({
@@ -38,6 +39,7 @@ const onSubmit = async () => {
         });
         formState.success = true;
         formState.submiting = false;
+        emit('successfulSubmit');
     } catch (e: any) {
         const error = e as AxiosError<SubmitError>;
         formState.errorDetail = {
@@ -62,12 +64,7 @@ const onSubmit = async () => {
                 <input type="text" required id="inputField" v-model="categoryName"
                     class="border border-gray-400 rounded-md outline-none focus:border-black px-4 py-3 w-full transition-all duration-100">
             </div>
-            <div v-if="formState.hasError" class="text-left mb-4">
-                <div class="text-sm text-red-500">Chyba pri odoslaní formulára ({{ formState.errorDetail.code ? `kód
-                                    ${formState.errorDetail.code}`
-                    : `Nedefinovanýkód chyby` }})!</div>
-                <div>{{ formState.errorDetail.description }}</div>
-            </div>
+            <ErrorViewer v-if="formState.hasError" :error-detail="formState.errorDetail" />
             <button type="submit"
                 class="w-full bg-black outline-none text-white px-4 rounded-md py-5 hover:bg-opacity-80">Pridať</button>
         </form>

@@ -33,7 +33,7 @@ onUnmounted(() => {
 
 <template>
     <div ref="modalContainer" id="addGalleryModal"
-        class="fixed z-10 top-0 left-0 w-[100vw] h-[100dvh] transition-all duration-300">
+        class="fixed z-50 top-0 left-0 w-[100vw] h-[100dvh] transition-all duration-300">
         <div data-modal-id="addGalleryModal" @click="emit('closeModal')"
             class="modalTrigger absolute left-0 top-0 w-full h-full bg-black opacity-50 z-10" />
         <div class="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 z-20 bg-white rounded-3xl overflow-hidden">

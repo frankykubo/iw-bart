@@ -1,3 +1,4 @@
+import { usePageLoadingStore } from '@/stores/pageLoading';
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -9,11 +10,8 @@ const router = createRouter({
       component: async () => import('@/views/HomeView.vue')
     },
     {
-      path: '/gallery/:path',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
+      path: '/gallery/:path/:imagePath?',
+      name: 'gallery',
       component: () => import('@/views/GalleryView.vue')
     },
     {
@@ -23,5 +21,13 @@ const router = createRouter({
     },
   ]
 })
+
+router.beforeEach((to, from) => {
+  const store = usePageLoadingStore();
+  if (to.name === from.name) {
+    return true;
+  }
+  store.pageLoading = true;
+});
 
 export default router

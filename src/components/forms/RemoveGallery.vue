@@ -3,6 +3,7 @@ import { reactive, type PropType } from 'vue';
 import axios, { AxiosError } from 'axios';
 import type { SubmitError } from '@/types/api';
 import AbsoluteLoader from '../AbsoluteLoader.vue';
+import ErrorViewer from './ErrorViewer.vue';
 
 const props = defineProps({
     galleryDetail: {
@@ -11,10 +12,18 @@ const props = defineProps({
             path: String,
         }>,
         required: true,
+    },
+    itemQuestion: {
+        type: String,
+        required: true,
+    },
+    successText: {
+        type: String,
+        required: true,
     }
 });
 
-const emit = defineEmits(['closeModal']);
+const emit = defineEmits(['closeModal', 'successfulSubmit']);
 
 const formState = reactive({
     submiting: false,
@@ -36,6 +45,7 @@ const onSubmit = async () => {
         await axios.delete(`${import.meta.env.VITE_APP_API_URL}/gallery/${props.galleryDetail.path}`);
         formState.success = true;
         formState.submiting = false;
+        emit('successfulSubmit');
     } catch (e: any) {
         const error = e as AxiosError<SubmitError>;
         formState.errorDetail = {
@@ -53,14 +63,9 @@ const onSubmit = async () => {
     <div>
         <div class="w-[50rem] max-w-[90vw] md:max-w-[65vw] px-12 pb-12 pt-1">
             <div class="relative mb-4">
-                Naozaj chcete vymazať galériu <span class="font-bold">{{ galleryDetail.name }}</span>?
+                {{ itemQuestion }} <span class="font-bold">{{ galleryDetail.name }}</span>?
             </div>
-            <div v-if="formState.hasError" class="text-left mb-4">
-                <div class="text-sm text-red-500">Chyba pri odoslaní formulára ({{ formState.errorDetail.code ? `kód
-                                    ${formState.errorDetail.code}`
-                    : `Nedefinovanýkód chyby` }})!</div>
-                <div>{{ formState.errorDetail.description }}</div>
-            </div>
+            <ErrorViewer v-if="formState.hasError" :error-detail="formState.errorDetail" />
             <div class="flex items-center">
                 <button @click="onSubmit"
                     class="w-full bg-red-600 outline-none text-white px-4 rounded-md py-5 hover:bg-opacity-80 mr-4">Vymazať</button>
@@ -84,7 +89,7 @@ const onSubmit = async () => {
                         </svg>
                     </div>
                     <div class="text-lg font-bold mb-3 text-green-500">
-                        Kategória bola zmazaná!
+                        {{ successText }}
                     </div>
                     <button class="block bg-black outline-none text-white px-6 rounded-md py-2 hover:bg-opacity-80"
                         @click="emit('closeModal')">

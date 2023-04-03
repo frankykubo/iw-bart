@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+
+const emit = defineEmits(['imageLoaded'])
 
 
-defineProps({
+const props = defineProps({
     imgUrl: {
         type: String,
         required: true,
@@ -11,14 +13,28 @@ defineProps({
         type: String,
         required: false,
         default: '',
-    }
+    },
 })
 
 const isLoaded = ref(false);
+const hasError = ref(false);
+const imageEl = ref();
 
 const onImageLoad = () => {
     isLoaded.value = true;
+    emit('imageLoaded');
 };
+
+const onImageError = () => {
+    hasError.value = true;
+    isLoaded.value = true;
+    emit('imageLoaded');
+};
+
+watch(() => props.imgUrl, () => {
+    imageEl.value.src = '';
+    isLoaded.value = false;
+});
 
 
 </script>
@@ -32,7 +48,15 @@ const onImageLoad = () => {
                     <div class="loader"></div>
                 </div>
             </Transition>
-            <img :class="imgClasses" :src="imgUrl" @load="onImageLoad" />
+            <Transition>
+                <div v-if="hasError" class="w-full h-full flex justify-center items-center">
+                    <div>
+                        Obrazok sa nepodarilo nacitat
+                    </div>
+                </div>
+            </Transition>
+            <img v-if="!hasError" ref="imageEl" :class="imgClasses" :src="imgUrl" @load="onImageLoad"
+                @error="onImageError" />
         </div>
     </KeepAlive>
 </template>

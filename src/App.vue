@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
+import { usePageLoadingStore } from '@/stores/pageLoading';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const store = usePageLoadingStore();
+
+router.afterEach(() => {
+  store.pageLoading = false;
+})
 </script>
 
 <template>
@@ -7,21 +16,19 @@ import { RouterView } from 'vue-router';
     <h1 class="text-3xl font-medium container">Fotogaléria</h1>
   </header>
 
-  <RouterView v-slot="{ Component }">
+  <RouterView v-if="!store.pageLoading" v-slot="{ Component }">
     <template v-if="Component">
       <Transition mode="out-in">
-        <KeepAlive>
-          <Suspense>
-            <component :is="Component"></component>
-            <template #fallback>
-              <main class="container mx-auto px-4 mb-20">
-                <div class="gallery-grid">
-                  <div v-for="(num, idx) in [1, 2, 3, 4, 5]" :key="idx" class="w-full h-48 loader" />
-                </div>
-              </main>
-            </template>
-          </Suspense>
-        </KeepAlive>
+        <Suspense>
+          <component :is="Component"></component>
+          <template #fallback>
+            <main class="container mx-auto px-4 mb-20">
+              <div class="gallery-grid">
+                <div v-for="(num, idx) in [1, 2, 3, 4, 5]" :key="idx" class="w-full h-48 loader" />
+              </div>
+            </main>
+          </template>
+        </Suspense>
       </Transition>
     </template>
   </RouterView>
