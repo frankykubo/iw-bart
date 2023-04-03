@@ -1,5 +1,5 @@
-import('./tailwind.css');
-import('./styles.scss');
+import './tailwind.css';
+import './styles.scss';
 
 // just to be able to preview modals, ignoring jumpy element bug
 
